@@ -1,3 +1,4 @@
+#!/bin/env node
 
 
 // init project
@@ -14,16 +15,18 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 // init sqlite db
-const dbFile = "./.data/sqlite.db";
+//const dbFile = "../.data/chinook.db";
+const dbFile = process.env.dbFile;
 const exists = fs.existsSync(dbFile);
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(dbFile);
 
-const create_table_dreams = `CREATE TABLE DREAMS (id INTEGER PRIMARY KEY AUTOINCREMENT, dream TEXT)`;
-const insert_into_dreams = `INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")`;
-const select_all_dreams = `SELECT * from Dreams`;
+import { initDB } from './utils/db/initDB';
+import { get_all_dreams } from './utils/db/queries';
+
 
 //TODO:  if ./.data/sqlite.db does not exist, create it, otherwise print records to console
+
 
 app.get("/", (request, response) => {
   const index_html = `${__dirname}/views/index.html`;
@@ -32,7 +35,7 @@ app.get("/", (request, response) => {
 
 // endpoint to get all the dreams in the database
 app.get("/getDreams", (request, response) => {
-  db.all(select_all_dreams, (err: Error, rows: string[]) => {
+  db.all(get_all_dreams, (err: Error, rows: string[]) => {
     if (err) throw err;
     const json_rows: string = JSON.stringify(rows);
     response.send(json_rows);
@@ -50,6 +53,7 @@ const cleanseString = function (string: string): string {
 
 const { PORT } = process.env;
 var listener = app.listen(PORT, function () {
+	initDB();
   const addressString = listener.address() as AddressInfo;
   console.log(`Your app is listenting on port ${addressString['port']}`);
 })
