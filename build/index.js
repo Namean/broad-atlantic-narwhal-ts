@@ -1,20 +1,15 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // init project
-const express_1 = __importDefault(require("express"));
-const node_fs_1 = __importDefault(require("node:fs"));
-const bodyParser = require("body-parser");
+import express from 'express';
+import fs from 'node:fs';
+import bodyParser from 'body-parser';
 // const uuid = require('crypto').randomUUID;
-const app = (0, express_1.default)();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express_1.default.static("public"));
+app.use(express.static("public"));
 // init sqlite db
 const dbFile = "./.data/sqlite.db";
-const exists = node_fs_1.default.existsSync(dbFile);
+const exists = fs.existsSync(dbFile);
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(dbFile);
 const create_table_dreams = `CREATE TABLE DREAMS (id INTEGER PRIMARY KEY AUTOINCREMENT, dream TEXT)`;
@@ -45,3 +40,4 @@ var listener = app.listen(PORT, function () {
     const addressString = listener.address();
     console.log(`Your app is listenting on port ${addressString['port']}`);
 });
+//# sourceMappingURL=index.js.map

@@ -3,7 +3,7 @@
 // init project
 import express from 'express';
 import fs from 'node:fs';
-import bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 import { AddressInfo } from 'net';
 // const uuid = require('crypto').randomUUID;
 const app = express();
