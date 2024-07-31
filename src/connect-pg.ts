@@ -19,7 +19,7 @@ await client.connect();
 const query_string = "SELECT * FROM playground;";
 const res = await client.query(query_string);
 
-console.log(res.rows[0].message); // Hello World!
+console.log(res.rows); // Hello World!
 await client.end();
 
 

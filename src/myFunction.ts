@@ -1,15 +1,15 @@
+#!/usr/bin/env node
 
-//const dbFile = '../../../.data/dreams.db';
-///
-const dbFile = process.env.dbFile;
+const dbFile = process.env.dreams as PathLike;
 import fs from 'node:fs';
-const exists = fs.existsSync(dbFile);
+import { PathLike } from 'node:fs';
+const exists: boolean = fs.existsSync(dbFile);
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(dbFile);
+const db = new sqlite3.Database('./dreams.db');
 
 
 
-export function initDB() {
+export function myFunction() {
   // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
   db.serialize(() => {
     if (!exists) {

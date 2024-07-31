@@ -1,38 +1,51 @@
+#!/bin/env node
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // init project
-import express from 'express';
-import fs from 'node:fs';
-import bodyParser from 'body-parser';
+const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
 // const uuid = require('crypto').randomUUID;
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static("public"));
+const app = (0, express_1.default)();
+app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(body_parser_1.default.json());
+app.use(express_1.default.static("public"));
 // init sqlite db
-const dbFile = "./.data/sqlite.db";
-const exists = fs.existsSync(dbFile);
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(dbFile);
-const create_table_dreams = `CREATE TABLE DREAMS (id INTEGER PRIMARY KEY AUTOINCREMENT, dream TEXT)`;
-const insert_into_dreams = `INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")`;
-const select_all_dreams = `SELECT * from Dreams`;
+//const dbFile = "../.data/chinook.db";
+const dbFile = process.env.dbFile;
+//const exists = fs.existsSync(dbFile);
+//const sqlite3 = require('sqlite3').verbose();
+const sqlite3_1 = __importDefault(require("sqlite3"));
+const db = new sqlite3_1.default.Database('./dreams.db');
+const sum_1 = require("./sum");
+console.log((0, sum_1.sum)(1, 1));
+const myFunction_1 = require("./myFunction");
+//import { get_all_dreams } from './queries';
+(0, myFunction_1.myFunction)();
 //TODO:  if ./.data/sqlite.db does not exist, create it, otherwise print records to console
+console.log(process.env.PORT);
 app.get("/", (request, response) => {
     const index_html = `${__dirname}/views/index.html`;
     response.sendFile(index_html);
 });
+/*
 // endpoint to get all the dreams in the database
 app.get("/getDreams", (request, response) => {
-    db.all(select_all_dreams, (err, rows) => {
-        if (err)
-            throw err;
-        const json_rows = JSON.stringify(rows);
-        response.send(json_rows);
-    });
-});
+  db.all(get_all_dreams, (err: Error, rows: string[]) => {
+    if (err) throw err;
+    const json_rows: string = JSON.stringify(rows);
+    response.send(json_rows);
+  })
+})
+
+
 // helper function that prevents html/css/script malice
-const cleanseString = function (string) {
-    return string.replace(/</g, "%lt;").replace(/>/g, "&gt;");
+const cleanseString = function (string: string): string {
+  return string.replace(/</g, "%lt;").replace(/>/g, "&gt;");
 };
+*/
 // listener for requests
 //const server_port: any = process.env.PORT ?? 8000;
 const { PORT } = process.env;

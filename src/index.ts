@@ -1,6 +1,7 @@
 #!/bin/env node
 
 
+
 // init project
 import express from 'express';
 import fs from 'node:fs';
@@ -17,15 +18,23 @@ app.use(express.static("public"));
 // init sqlite db
 //const dbFile = "../.data/chinook.db";
 const dbFile = process.env.dbFile;
-const exists = fs.existsSync(dbFile);
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(dbFile);
+//const exists = fs.existsSync(dbFile);
+//const sqlite3 = require('sqlite3').verbose();
+import sqlite3 from 'sqlite3';
+const db = new sqlite3.Database('./dreams.db');
 
-import { initDB } from './utils/db/initDB';
-import { get_all_dreams } from './utils/db/queries';
 
+import { sum } from './sum';
+console.log(sum(1, 1))
+import { myFunction } from './myFunction';
+//import { get_all_dreams } from './queries';
+
+myFunction();
 
 //TODO:  if ./.data/sqlite.db does not exist, create it, otherwise print records to console
+
+
+console.log(process.env.PORT);
 
 
 app.get("/", (request, response) => {
@@ -33,6 +42,7 @@ app.get("/", (request, response) => {
   response.sendFile(index_html);
 });
 
+/*
 // endpoint to get all the dreams in the database
 app.get("/getDreams", (request, response) => {
   db.all(get_all_dreams, (err: Error, rows: string[]) => {
@@ -47,13 +57,13 @@ app.get("/getDreams", (request, response) => {
 const cleanseString = function (string: string): string {
   return string.replace(/</g, "%lt;").replace(/>/g, "&gt;");
 };
-
+*/
 // listener for requests
 //const server_port: any = process.env.PORT ?? 8000;
 
 const { PORT } = process.env;
 var listener = app.listen(PORT, function () {
-	initDB();
+
   const addressString = listener.address() as AddressInfo;
   console.log(`Your app is listenting on port ${addressString['port']}`);
 })

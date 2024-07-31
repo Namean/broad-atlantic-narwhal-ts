@@ -2,10 +2,9 @@
   "name": "sort",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start:build": "tsc -w",
-    "start:run": "env $(cat .env) nodemon build/index.js",
+    "start:run": "nodemon --exec node --env-file=.env build/index.js",
     "start": "concurrently npm:start:*"
   },
   "keywords": [],
