@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // open the database
-const db_name = 'chinook.db';
+const db_name = process.env.db ?? 'chinook.db';
 const db_path='/Users/allspark/Documents/src/repos/my-repos/july/broad-atlantic-narwhal-ts/.data'
 let db = new sqlite3.Database(`${db_path}/${db_name}`, sqlite3.OPEN_READWRITE, (err: Error) => {
   if (err) {

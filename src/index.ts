@@ -34,7 +34,7 @@ myFunction();
 //TODO:  if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 
 
-console.log(process.env.PORT);
+
 
 
 app.get("/", (request, response) => {

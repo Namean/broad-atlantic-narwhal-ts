@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+
+
+alias config="vim package.json"
+alias tsconfig="vim tsconfig.json"
+
+
+
