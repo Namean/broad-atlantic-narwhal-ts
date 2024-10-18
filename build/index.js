@@ -1,34 +1,53 @@
 #!/bin/env node
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // init project
-const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
+import express from 'express';
+import { exists } from 'node:fs';
+import bodyParser from 'body-parser';
+// import myFunction from './myFunction';
 // const uuid = require('crypto').randomUUID;
-const app = (0, express_1.default)();
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use(body_parser_1.default.json());
-app.use(express_1.default.static("public"));
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static("public"));
+app.use(express.static("public/views/"));
 // init sqlite db
 //const dbFile = "../.data/chinook.db";
-const dbFile = process.env.dbFile;
+// const dbFile = process.env.dbFile;
 //const exists = fs.existsSync(dbFile);
 //const sqlite3 = require('sqlite3').verbose();
-const sqlite3_1 = __importDefault(require("sqlite3"));
-const db = new sqlite3_1.default.Database('./dreams.db');
-const sum_1 = require("./sum");
-console.log((0, sum_1.sum)(1, 1));
-const myFunction_1 = require("./myFunction");
+import sqlite3 from 'sqlite3';
+const db = new sqlite3.Database('./dreams.db');
+// console.log(sum(1, 1))
 //import { get_all_dreams } from './queries';
-(0, myFunction_1.myFunction)();
+function myFunction() {
+    // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
+    db.serialize(() => {
+        if (!exists) {
+            db.run("CREATE TABLE Dreams (id INTEGER PRIMARY KEY AUTOINCREMENT, dream TEXT)");
+            console.log("New table Dreams created!");
+            // insert default dreams
+            db.serialize(() => {
+                db.run('INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
+            });
+        }
+        else {
+            console.log('Database "Dreams" ready to go!');
+            db.each("SELECT * from Dreams", (err, row) => {
+                if (row) {
+                    console.log(`record: ${row.dream}`);
+                }
+            });
+        }
+    });
+}
+myFunction();
 //TODO:  if ./.data/sqlite.db does not exist, create it, otherwise print records to console
-console.log(process.env.PORT);
 app.get("/", (request, response) => {
-    const index_html = `${__dirname}/views/index.html`;
-    response.sendFile(index_html);
+    response.sendFile('./views/index.html');
 });
 /*
 // endpoint to get all the dreams in the database
@@ -48,7 +67,8 @@ const cleanseString = function (string: string): string {
 */
 // listener for requests
 //const server_port: any = process.env.PORT ?? 8000;
-const { PORT } = process.env;
+// const PORT = process.env;
+const PORT = 9000;
 var listener = app.listen(PORT, function () {
     const addressString = listener.address();
     console.log(`Your app is listenting on port ${addressString['port']}`);

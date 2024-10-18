@@ -9,7 +9,7 @@ const db = new sqlite3.Database('./dreams.db');
 
 
 
-export function myFunction() {
+export default function myFunction() {
   // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
   db.serialize(() => {
     if (!exists) {

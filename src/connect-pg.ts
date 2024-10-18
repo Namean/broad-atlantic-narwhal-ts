@@ -14,12 +14,12 @@ const client = new Client({
   port: 5432,
   database: 'desmond'
 });
-await client.connect();
+// await client.connect();
 
-const query_string = "SELECT * FROM playground;";
-const res = await client.query(query_string);
+// const query_string = "SELECT * FROM playground;";
+// const res = await client.query(query_string);
 
-console.log(res.rows); // Hello World!
-await client.end();
+// console.log(res.rows); // Hello World!
+// await client.end();
 
 
